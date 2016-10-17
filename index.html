@@ -45,13 +45,17 @@ function game() {
   var result = -1;
   if(swaps.past) {
     result = swaps.move(word);
+    if(result) {
+      word = swaps.constants.MOVE_CODES.TEXT[result];
+    }
   } else {
     result = swaps.start(word);
+    if(result) {
+      word = swaps.constants.START_CODES.TEXT[result];
+    }
   }
 
-  if(result) {
-    word = swaps.constants.MOVE_CODES.TEXT[result];
-  }
+  
   var p = document.createElement("p");
   p.innerText = word;
   div_past.appendChild(p);
