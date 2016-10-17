@@ -1,5 +1,3 @@
-<script src="js/swaps.js"></script>
-<script src="js/swaps_ai.js"></script>
 <script src="js/word_list.js"></script>
 <script src="js/dictionary/a_words.js"></script>
 <script src="js/dictionary/b_words.js"></script>
@@ -27,5 +25,47 @@
 <script src="js/dictionary/x_words.js"></script>
 <script src="js/dictionary/y_words.js"></script>
 <script src="js/dictionary/z_words.js"></script>
-<!--<script src="js/word_tree.js"></script>
-<script src="js/dictionary.js"></script>-->
+
+<!--<script src="js/make_word_tree.js"></script>-->
+
+<script src="js/word_tree.js"></script>
+<script src="js/dictionary.js"></script>
+
+<script src="js/swaps.js"></script>
+<script src="js/swaps_ai.js"></script>
+
+<input id="word_input" width="10em"/>
+
+<script>
+
+var word_input = document.getElementById("word_input");
+
+function game() {
+  var word = word_input.value
+  var result = -1;
+  if(swaps.past) {
+    result = swaps.move(word);
+  } else {
+    result = swaps.start(word);
+  }
+
+  if(result) {
+    word = swaps.constants.MOVE_CODES.TEXT[result];
+  }
+  var p = document.createElement("p");
+  p.innerText = word;
+  div_past.appendChild(p);
+  div_past.insertBefore(p, div_past.firstChild);
+
+  word_input.value = "";
+}
+
+</script>
+
+<input type="button" value="MOVE" onclick="game()"/>
+
+<div id="past"/>
+
+<script>
+var div_past = document.getElementById("past");
+</script>
