@@ -130,7 +130,7 @@ swaps.is_remove = function(last_word, next_word) {
   var offset = 0;
 
   for(var l = last_word.length, i = 0; i < l; ++i) {
-    if(last_word[i] !== next_word[i + offset]) {
+    if(last_word[i] !== next_word[i - offset]) {
       if(offset) {
         return false;
       } else {
