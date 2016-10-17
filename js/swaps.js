@@ -179,14 +179,14 @@ swaps.move = function(next_word) {
     return swaps.constants.MOVE_CODES.NOT_WORD;
   } 
 
-  if(length_check === 0 && 
-                      (
-                        swaps.is_flip(last_word.word, next_word.word) || 
-                        swaps.is_replace(last_word.word, next_word.word) || 
-                        swaps.is_swap(last_word.word, next_word.word)
-                      ))
+  var valid_move = false;
+
+  if(length_check === 0)
   {
-    valid_move = true;
+    if(swaps.is_flip(last_word.word, next_word.word) || 
+       swaps.is_replace(last_word.word, next_word.word) ||
+       swaps.is_swap(last_word.word, next_word.word))
+      valid_move = true;
   }
 
   if(length_check === 1 && swaps.is_add(last_word.word, next_word.word))
