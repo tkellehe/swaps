@@ -41,7 +41,7 @@
 var word_input = document.getElementById("word_input");
 
 function game() {
-  var word = word_input.value
+  var word = word_input.value.toLowerCase()
   var result = -1;
   if(swaps.past) {
     result = swaps.move(word);
