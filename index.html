@@ -36,9 +36,16 @@
 
 <input id="word_input" width="10em"/>
 
+<script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
 <script>
 
 var word_input = document.getElementById("word_input");
+$("#word_input").keypress(function(e) {
+    if(e.which == 13) {
+       game();
+    }
+});
 
 function game() {
   var word = word_input.value.toLowerCase()
