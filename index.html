@@ -47,8 +47,15 @@ $("#word_input").keypress(function(e) {
     }
 });
 
+function message(word) {
+  var p = document.createElement("p");
+  p.innerText = word;
+  div_past.appendChild(p);
+  div_past.insertBefore(p, div_past.firstChild);
+}
+
 function game() {
-  var word = word_input.value.toLowerCase()
+  var word = $("#word_input").val().toLowerCase();
   var result = -1;
   if(swaps.past) {
     result = swaps.move(word);
@@ -62,18 +69,46 @@ function game() {
     }
   }
 
-  
-  var p = document.createElement("p");
-  p.innerText = word;
-  div_past.appendChild(p);
-  div_past.insertBefore(p, div_past.firstChild);
+  message(word);
 
-  word_input.value = "";
+  $("#word_input").val("");
+}
+
+function check() {
+  if(swaps.past) {
+    var node = swaps_ai.move0();
+    if(node) {
+      message("There is another valid move.");
+    } else {
+      message("Could not find another valid move.");
+    }
+  } else {
+    message("Any three letter word is a valid move.");
+  }
+}
+
+function ai() {
+  var word;
+  if(swaps.past) {
+    var node = swaps_ai.move0();
+    if(!node) {
+      message("Could not find another valid move.");
+      return;
+    }
+    word = node.word;
+  } else {
+    // Picks pop to start.
+    word = "pop";
+  }
+  $("#word_input").val(word);
+  game();
 }
 
 </script>
 
 <input type="button" value="MOVE" onclick="game()"/>
+<input type="button" value="AI" onclick="ai()"/>
+<input type="button" value="CHECK" onclick="check()"/>
 
 <div id="past"/>
 

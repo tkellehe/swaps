@@ -22,7 +22,7 @@ var swaps = {
           , "The word provided is too short."
           , "The move used a previous word."
           , "Failed to provide a word."
-          , "The move attempted is not a vaid SWAPS move."]
+          , "The move attempted is not a valid SWAPS move."]
         , SUCCESS : 0
         , SAME_WORD : 1
         , WORD_LENGTH_DIFFERENCE : 2
@@ -53,7 +53,7 @@ swaps.start = function(first_word) {
   }
 
   swaps.past = [];
-  swaps.past.unshift(word_node);
+  swaps.push_move(word_node);
 
   return swaps.constants.START_CODES.SUCCESS;
 }
@@ -142,18 +142,50 @@ swaps.is_remove = function(last_word, next_word) {
   return true;
 }
 
-swaps.is_not_past = function(past, next_word) {
+swaps.find_past = function(past, next_word) {
   for(var i = past.length; i--;) {
     if(past[i].word === next_word) {
-      return false;
+      return past[i];
     }
   }
 
-  return true;
+  return undefined;
+}
+
+swaps.is_in_past = function(past, next_word) {
+  return !!swaps.find_past(past, next_word);
+}
+
+swaps.is_too_long = function(word) {
+  return 10 < word.length;
+} 
+
+swaps.is_too_short = function(word) {
+  return word.length < 3;
+} 
+
+swaps.last_word = function() {
+  return swaps.past[0];
+}
+
+swaps.push_move = function(next_word) {
+  swaps.past.unshift(next_word);
 }
 
 swaps.move = function(next_word) {
-  var last_word = swaps.past[0];
+  var ptr = {content:undefined}, 
+    code = swaps.validate(next_word, ptr);
+  if(!code) {
+    swaps.push_move(ptr.content);
+  }
+  return code;
+}
+
+//-------------------------------------------------------------------
+// Validates a move towards the game returning a code about the move.
+//-------------------------------------------------------------------
+swaps.validate = function(next_word, ptr) {
+  var last_word = swaps.last_word();
 
   if(last_word.word === next_word)
   {
@@ -166,17 +198,17 @@ swaps.move = function(next_word) {
     return swaps.constants.MOVE_CODES.WORD_LENGTH_DIFFERENCE;
   }
 
-  if(10 < next_word.length)
+  if(swaps.is_too_long(next_word))
   {
     return swaps.constants.MOVE_CODES.WORD_TOO_LONG;
   }
 
-  if(next_word.length < 3)
+  if(swaps.is_too_short(next_word))
   {
     return swaps.constants.MOVE_CODES.WORD_TOO_SHORT;
   }
 
-  if(!swaps.is_not_past(swaps.past, next_word))
+  if(swaps.is_in_past(swaps.past, next_word))
   {
     return swaps.constants.MOVE_CODES.PAST_WORD;
   }
@@ -210,7 +242,7 @@ swaps.move = function(next_word) {
 
   if(valid_move)
   {
-    swaps.past.unshift(next_word);
+    if(ptr) (ptr.content = next_word);
     return swaps.constants.MOVE_CODES.SUCCESS;
   }
 
