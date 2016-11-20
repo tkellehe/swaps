@@ -142,6 +142,16 @@ swaps.is_remove = function(last_word, next_word) {
   return true;
 }
 
+swaps.is_not_past = function(past, next_word) {
+  for(var i = past.length; i--;) {
+    if(past[i].word === next_word) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 swaps.move = function(next_word) {
   var last_word = swaps.past[0];
 
@@ -166,10 +176,9 @@ swaps.move = function(next_word) {
     return swaps.constants.MOVE_CODES.WORD_TOO_SHORT;
   }
 
-  for(var i = swaps.past.length; i--;) {
-    if(swaps.past[i].word === next_word) {
-      return swaps.constants.MOVE_CODES.PAST_WORD;
-    }
+  if(!swaps.is_not_past(swaps.past, next_word))
+  {
+    return swaps.constants.MOVE_CODES.PAST_WORD;
   }
 
   next_word = swaps.dictionary.is_word(next_word);
